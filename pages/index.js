@@ -1,22 +1,37 @@
 import React from 'react'
 import Header from '../components/Header';
-import dataFriends from '../data/dataFriends';
 import Card from '../components/Card';
 import styles from "../styles/styles.module.css";
 import dataWeek from '../data/dataWeek';
 import Head from 'next/head';
 import Link from 'next/link';
 
+export async function getServerSideProps(ctx) {
+  // get the current environment
+  let dev = process.env.NODE_ENV !== 'production';
+  let { DEV_URL, PROD_URL } = process.env;
 
-export default function HomePage() {
-  
-  const cardsFriends = dataFriends.map(item => {
+  // request posts from api
+  let response = await fetch(`${dev ? DEV_URL : PROD_URL}/api/data`);
+  // extract the data
+  let data = await response.json();
+
+  return {
+      props: {
+        dataDB : data["message"]
+      }
+  };
+}
+
+export default function HomePage({dataDB}) {
+
+  const dataFromDataBase = dataDB.map(item => {
     return(
-      <React.Fragment key={item.id}>
-        <Link href={`/overview/${item.id}`}>
+      <React.Fragment key={item._id}>
+        <Link href={`/overview/${item._id}`}>
           <a className={styles.a}>
             <Card
-              key={item.id}
+              key={item._id}
               {...item}
             />
           </a>
@@ -52,7 +67,7 @@ export default function HomePage() {
       </div>
       <h2 style={{paddingLeft:"1rem"}}>New from friends</h2>
       <div className={styles.cardContainer}>
-        {cardsFriends}
+        {dataFromDataBase}
       </div>
     </div>
   )

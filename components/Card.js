@@ -3,17 +3,19 @@ import React from "react";
 import styles from "../styles/styles.module.css";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalf } from '@fortawesome/free-solid-svg-icons';
+import Image from "next/image";
 
 export default function Card(props){
 
     return(
         <div className={styles.card} >
-            <img src={props.cover} className={styles.cardImg}/>
+            <img src={props.cover} className={styles.cardImg} alt="" />
             <div className={`${props.author === "" ? `${styles.invisible}` : `${styles.visible}`}`}>
                 <div className={styles.align}>
-                    <img className={styles.icon} src={props.icon} />
+                    <img className={styles.icon} src={props.icon} alt="" />
                     <p className={styles.p}>{props.author} </p>
                 </div>
+                
                 {getRating(props.rating)}
             </div>
         </div>

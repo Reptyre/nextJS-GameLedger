@@ -21,9 +21,17 @@ const StarRating = (props) => {
         props.setIsHovered(false);
         const rating = calculateRating(e);
         props.setNewRating(rating);
+        const dataIdAndRatingToUppdate = {
+            id: props.id,
+            rating: rating
+        }
+        fetch("/api/data", {
+            method: "PUT",
+            body: JSON.stringify(dataIdAndRatingToUppdate)
+        })
         //props.dataFriend.rating = rating;
         //const updateRating = {rating: rating}
-        fetch("/api/updateData", {
+        /* fetch("/api/updateData", {
             method: "POST",
             headers:{"Content-Type": "application/json",},
             body: JSON.stringify([props.dataFriend.id, rating]),
@@ -32,7 +40,7 @@ const StarRating = (props) => {
             .then(data => {
                 console.log(data)
                 props.dataFriend.rating = data.rating
-            })
+            }) */
     };
     
     const handleMouseMove = (e) => {
@@ -108,7 +116,5 @@ const StarRating = (props) => {
         </div>
     )
 }
-
-
 
 export default StarRating

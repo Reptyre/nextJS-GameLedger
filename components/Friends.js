@@ -4,16 +4,17 @@ import dataFriends from "../data/dataFriends";
 import styles from "../styles/styles.module.css";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalf } from '@fortawesome/free-solid-svg-icons';
+import Image from "next/image";
 
 export default function Friends(props){
-
+    
     const ratingOfFriends = dataFriends.map(item => {
         
         return(
             <div key={item.id} style={{marginRight: "12px"}}>
                 {item.title === props.title && <div>
                     <div className={styles.align}>
-                        <img className={styles.icon} src={item.icon} />
+                        <img className={styles.icon} src={item.icon} alt="" />
                         <p className={styles.p}>{item.author} </p>
                     </div>
                     {getRating(item.rating)}

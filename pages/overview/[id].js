@@ -3,34 +3,58 @@ import React, {useEffect} from "react";
 import styles from "../../styles/styles.module.css";
 import Header from "../../components/Header";
 import Friends from "../../components/Friends";
-import dataFriends from "../../data/dataFriends";
 import Link from "next/link";
 import Head from 'next/head';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import StarRating from "../../components/StarRating";
+import Image from "next/image";
 
 export async function getStaticPaths(){
-  const paths = dataFriends.map(item =>({
-    params: {id: item.id.toString()},
+
+  // get the current environment
+let dev = process.env.NODE_ENV !== 'production';
+let { DEV_URL, PROD_URL } = process.env;
+  // request posts from api
+let response = await fetch(`${dev ? DEV_URL : PROD_URL}/api/data`);
+// extract the data
+let data = await response.json();
+  
+  const paths = data["message"].map(item =>({
+    params: {id: item._id.toString()},
   }))
   return {paths, fallback: false}
 }
 
 export async function getStaticProps({params}){
-  const data = dataFriends.filter(d => d.id.toString() === params.id)
+
+  // get the current environment
+let dev = process.env.NODE_ENV !== 'production';
+let { DEV_URL, PROD_URL } = process.env;
+  // request posts from api
+let response = await fetch(`${dev ? DEV_URL : PROD_URL}/api/data`);
+// extract the data
+let data = await response.json();
+
+  const dataDB = data["message"].filter(d => d._id.toString() === params.id)
   return {
     props: {
-      id: data[0].id
+      id: dataDB[0]._id,
+      title: dataDB[0].title,
+      release: dataDB[0].release,
+      author: dataDB[0].author,
+      icon: dataDB[0].icon,
+      rating: dataDB[0].rating,
+      cover: dataDB[0].cover
     }
   }
 }
 
-export default function Detail({id}){
+export default function Detail(props){
 
-  const index = id
-  const [newRating, setNewRating] = React.useState(dataFriends[index].rating)
-  const [hoverActive, setHoverActive] = React.useState(dataFriends[index].rating)
+  //const index = id
+  const [newRating, setNewRating] = React.useState(props.rating)
+  const [hoverActive, setHoverActive] = React.useState(props.rating)
   const [isHovered, setIsHovered] = React.useState(false)
   const ratingRef = React.useRef(null)
   
@@ -42,9 +66,9 @@ export default function Detail({id}){
   return(
     <div className={styles.container}>
       <Head>
-        <title>{dataFriends[index].title}</title>
+        <title>{props.title}</title>
       </Head>
-      <Header title={dataFriends[index].title}/>
+      <Header title={props.title}/>
       <div className={styles.detailContainer}>
         <div className={styles.left}>
           <Link href="/">
@@ -52,8 +76,8 @@ export default function Detail({id}){
               <FontAwesomeIcon icon={faArrowLeft}/>
             </a>
           </Link>
-          <h1>{dataFriends[index].title}</h1>
-          <h2>{dataFriends[index].release}</h2>
+          <h1>{props.title}</h1>
+          <h2>{props.release}</h2>
           <label htmlFor="rating"> 
             <StarRating 
               setNewRating={setNewRating} 
@@ -63,17 +87,18 @@ export default function Detail({id}){
               setIsHovered={setIsHovered}
               isHovered={isHovered}
               ratingRef={ratingRef}
-              dataFriend={dataFriends[index]}
+              dataFriend={props}
+              id={props.id}
             />
           </label>
           <h4>Prev: {newRating} New: {hoverActive}</h4>
         </div>
         <div className={styles.right}>
-          <img src={dataFriends[index].cover} />
+          <img src={props.cover} alt="" />
         </div>
 
       </div>
-      <Friends title={dataFriends[index].title}/>
+      <Friends title={props.title}/>
     </div>
   )
 }
