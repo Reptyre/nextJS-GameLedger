@@ -1,0 +1,45 @@
+
+[
+    {
+        "user": [{
+            "id": 0,
+            "name": "",
+            "eMail": "",
+            "icon": "",
+            "gamesplayed": [{  
+                "id": "",
+                "title": "God of War",
+                "release": "20. April 2018",
+                "dateReviewed": "",
+                "review": "",
+                "author": [{
+                    "icon": "",
+                    "name": ""
+                }],
+                "rating": 5,
+                "cover": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tmu.png"
+            }]
+        }]
+    },
+    {
+        "user": [{
+            "id": 0,
+            "name": "",
+            "eMail": "",
+            "icon": "",
+            "gamesplayed": [{  
+                "id": "",
+                "title": "God of War",
+                "release": "20. April 2018",
+                "dateReviewed": "",
+                "review": "",
+                "author": [{
+                    "icon": "",
+                    "name": ""
+                }],
+                "rating": 5,
+                "cover": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tmu.png"
+            }]
+        }]
+    }
+]
